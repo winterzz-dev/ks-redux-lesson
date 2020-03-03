@@ -1,40 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import { Table } from 'antd';
-import 'antd/dist/antd.css';
-import Users from './UsersTable'
-import Modal from './Modal'
+import React from "react";
+import "./App.css";
+import "antd/dist/antd.css";
+import Users from "./UsersTable";
+import Modal from "./Modal";
+import { Row, Col } from "antd";
 
 class App extends React.Component {
   state = {
-    isLoggedIn: false,
-    blockedUsers: [],
-    modalVisible: false
-  }
-
-  triggerModal = (e, record = null) => {
-    this.setState({
-      modalVisible: !this.state.modalVisible,
-      userData: record
-    });
+    blockedUsers: []
   };
 
-  blockUser = (content) => {
-    alert(`Пользователь с ID = ${content.id} заблокирован`)
-  }
+  blockUser = content => {
+    if (this.state.blockedUsers.indexOf(content.id) === -1) {
+      this.setState(state => {
+        return {
+          blockedUsers: [...state.blockedUsers].concat([content.id])
+        };
+      });
+      return;
+    } else {
+      const filtredUsers = this.state.blockedUsers.filter(item => {
+        return item !== content.id;
+      });
+      this.setState(state => {
+        return {
+          blockedUsers: filtredUsers
+        };
+      });
+    }
+  };
 
   render() {
-    const {
-      blockedUsers = [],
-      userData = null,
-      modalVisible = false
-    } = this.state
+    const { blockedUsers = [] } = this.state;
 
     return (
       <div className="App">
-        <Modal />
-        <Users blockedUsers={this.state.blockedUsers} />
+        <Modal blockUser={this.blockUser} blockedUsers={blockedUsers} />
+        <Row>
+          <Col span={12} offset={6}>
+            <Users blockedUsers={blockedUsers} />
+          </Col>
+        </Row>
       </div>
     );
   }

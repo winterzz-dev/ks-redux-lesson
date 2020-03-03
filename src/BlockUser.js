@@ -1,26 +1,55 @@
 /* eslint-disable react/react-in-jsx-scope */
-import React from 'react'
-import { Popconfirm, Button } from 'antd';
+import React from "react";
+import { Popconfirm, Button } from "antd";
+import { connect } from "react-redux";
+import { CHANGE_MODAL_VISIBLE } from "./redux/action-types";
 
 class BlockUser extends React.Component {
-    render () {
-        const {
-            content = {},
-            blockUser
-        } = this.props
+  render() {
+    const { content = {}, blockUser, blockedUsers = [] } = this.props;
 
-        return (
-            <Popconfirm
-                title="Вы уверены что хотите заблокировать пользователя?"
-                onConfirm={() => blockUser(content)}
-                okText="Да"
-                cancelText="Нет"
-            >
-                <Button type='danger' > Заблокировать пользователя </Button>
-            </Popconfirm>
-        )
-    }
-    
+    return (
+      <Popconfirm
+        title={
+          content !== null && blockedUsers.indexOf(content.id) === -1
+            ? "Вы уверены что хотите заблокировать пользователя?"
+            : "Вы уверены что хотите разблокировать пользователя?"
+        }
+        onConfirm={() => {
+          blockUser(content);
+          this.props.triggerModal();
+        }}
+        okText="Да"
+        cancelText="Нет"
+      >
+        <Button
+          type={
+            content !== null && blockedUsers.indexOf(content.id) === -1
+              ? "danger"
+              : "primary"
+          }
+        >
+          {content !== null && blockedUsers.indexOf(content.id) === -1
+            ? "Заблокировать пользователя"
+            : "Разблокировать пользователя"}
+        </Button>
+      </Popconfirm>
+    );
+  }
+}
+
+const mapStateToProps = state => {
+  return {};
 };
 
-export default BlockUser;
+const mapDispatchToProps = dispatch => {
+  return {
+    triggerModal: function() {
+      return dispatch({
+        type: CHANGE_MODAL_VISIBLE
+      });
+    }
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BlockUser);
