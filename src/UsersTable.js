@@ -75,7 +75,9 @@ class Users extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    blockedUsers: state.blockedUsers.users
+  };
 };
 
 const mapDispatchToProps = dispatch => {

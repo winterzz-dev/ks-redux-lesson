@@ -20,12 +20,7 @@ class Modal extends React.Component {
   }
 
   render() {
-    const {
-      visible = false,
-      triggerModal,
-      content = null,
-      blockUser
-    } = this.props;
+    const { visible = false, triggerModal, content = null } = this.props;
 
     return (
       <AntdModal
@@ -35,11 +30,7 @@ class Modal extends React.Component {
         onCancel={triggerModal}
       >
         {this.renderContent(content)}
-        <BlockUser
-          blockUser={blockUser}
-          content={content}
-          blockedUsers={this.props.blockedUsers}
-        />
+        <BlockUser content={content} />
       </AntdModal>
     );
   }

@@ -3,6 +3,7 @@ import React from "react";
 import { Popconfirm, Button } from "antd";
 import { connect } from "react-redux";
 import { CHANGE_MODAL_VISIBLE } from "./redux/action-types";
+import { toggleUserBlockAction } from "./redux/actions";
 
 class BlockUser extends React.Component {
   render() {
@@ -39,7 +40,9 @@ class BlockUser extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {};
+  return {
+    blockedUsers: state.blockedUsers.users
+  };
 };
 
 const mapDispatchToProps = dispatch => {
@@ -48,6 +51,10 @@ const mapDispatchToProps = dispatch => {
       return dispatch({
         type: CHANGE_MODAL_VISIBLE
       });
+    },
+    blockUser: id => {
+      let action = toggleUserBlockAction(id.id);
+      dispatch(action);
     }
   };
 };
